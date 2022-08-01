@@ -1,0 +1,253 @@
+# Page settings
+
+baseURL = "https://coleman.stoltze.family"
+languageCode = "en"
+title = "Resume - Coleman Stoltze"
+theme = "hugo-devresume-theme"
+
+[params]
+    author = "CowboySmall"
+    description = "DevResume - Bootstrap 4 Resume/CV Template For Software Developers"
+
+    primaryColor = "#54B689"
+    textPrimaryColor = "#292929"
+
+    [params.profile]
+        enable = true
+        name = "Coleman Stoltze"
+        tagline = "Software Developer"
+        # avatar = "avatar.png"
+
+    [params.contact]
+        enable = true
+        location = "North Carolina"
+
+        [[params.contact.list]]
+        icon = "fas fa-phone-square"
+        url = "tel:+12038569820"
+        text = "+1 203 856 9820"
+        [[params.contact.list]]
+        icon = "fas fa-envelope-square"
+        url = "mailto:coleman@stoltze.family"
+        text = "coleman@stoltze.family"
+        [[params.contact.list]]
+        icon = "fas fa-globe"
+        url = "//coleman.stoltze.family"
+        text = "coleman.stoltze.family"
+
+
+    [params.summary]
+        enable = true
+	# TODO: Improve the summary
+        text = """\
+	A developer who writes simple idiomatic code, drives product improvement and learns continuously.
+	An engineer who understands the big picture and minds the details. A teammate who levels up the 
+	people around him.
+	"""
+	# I believe ...
+	# 	that simple is better than complex
+	# 	code should be readable
+	# 	readability > performance in almost every case
+	# 	spending the extra 10% of effort for unit tested readable clear code pays for itself
+
+
+
+    [params.experience]
+        enable = true
+
+        [[params.experience.list]]
+        title = "Senior Software Developer / Technical Lead"
+        dates = "Sept 2020 - June 2022"
+        company = "ixlayer"
+        details = """\
+	As the second full time backend developer, I established a collaborative remote team culture
+	grounded in written communication: detailed code review, clear concise unit tested code, and
+	technical doucumentation.
+	During my time at ixlayer,
+	we raised an extremely successful Series A and grew by an order of magnitude. I rose to
+	tech lead on the "core" backend team, mentoring junior developers, establishing team standards for code, 
+	overhauling our information architecture, and working cross-functionally with product managers
+	and frontend developers to propose solutions to customer problems.
+	"""
+        [[params.experience.list.items]]
+        details = "Aligned data model with industry-standard FHIR specification"
+        [[params.experience.list.items]]
+        details = "Implemented lab result interpretation engine"
+        [[params.experience.list.items]]
+        details = "Integrated third party API's (payment providers, labs, doctor networks, etc.)"
+        [[params.experience.list.items]]
+        details = "Maintained and augmented internal and external REST APIs"
+        [[params.experience.list.items]]
+        details = "Established a collaborative and quality-focused team culture"
+
+
+        [[params.experience.list]]
+        title = "Senior Software Developer"
+        dates = "Sept 2019 - Sept 2020"
+        company = "OrbitalRX"
+        details = """\
+	As the primary application developer on a technical team of four, I had a high degree 
+	of ownership of technical decisions on both the backend and frontend. Collaborating with
+	the CTO and product designer, I wrote API's and frontend components to enable new features.
+	I aggressively paid down technical debt by writing unit tests, refactoring large frontend
+	components, and significantly simplifying the backend.
+	"""
+        [[params.experience.list.items]]
+        details = "Re-architected backend. Consolidated two servers (Apollo Server and Django REST) into one GraphQL server written in Go using gqlgen"
+        [[params.experience.list.items]]
+        details = "Improved readability and maintainability of the frontend using React hooks, testing (react testing library, cypress), and documentation (react-styleguidist)"
+        [[params.experience.list.items]]
+        details = "Mentored a junior frontend developer (recent code bootcamp grad)"
+
+        [[params.experience.list]]
+        title = "Software Developer"
+        dates = "July 2018 - Sept 2019"
+        company = "SolarWinds"
+        details = """\
+	Working as part of a multi-national team, I enabled user registration for and configuration of Solarwinds Threat Monitor 
+	product (acquired from Trusted Metrics). 
+	"""
+	[[params.experience.list.items]]
+        details = "Created a user registration server using Python’s Connexion library"
+	[[params.experience.list.items]]
+        details = "Collaborated with a multi-national team of developers"
+
+        [[params.experience.list]]
+        title = "Python Developer"
+        dates = "Dec 2017 - July 2018"
+        company = "Trusted Metrics"
+        details = """\
+	As the Python developer at a company of 8 employees, I leveraged an open source 
+	project to implement the next generation alerting engine for our flagship product.
+	My efforts contributed to a successful acquisition by SolarWinds.
+	"""
+	[[params.experience.list.items]]
+        details = "Implemented next generation alerting engine for Trusted Metrics’ flagship product"
+
+
+        [[params.experience.list]]
+        title = "Software Developer"
+        dates = "April 2016 - Nov 2017"
+        company = "Czitek"
+        details = """\
+	Recruited away from Agilent, I joined Czitek, a small start-up developing FTIR (Fourier Transform Infrared) spectrometer products.
+	I developed software to support engineering, manufacturing and use of FTIR spectrometers.
+	Additionally, I contributed in a scientific capacity: troubleshooting prototypes, running
+	experiments, and implementing algorithms.
+	"""
+        [[params.experience.list.items]]
+        details = "Implemented an FTIR and signal processing algorithm suite"
+        [[params.experience.list.items]]
+        details = "Used MvvmCross and C# to create the UI for the ThreatID spectrometer"
+        [[params.experience.list.items]]
+        details = "Developed an internal website tracking prototype metrics using Django"
+
+        [[params.experience.list]]
+        title = "Hardware Engineer"
+        dates = "June 2014 - April 2016"
+        company = "Agilent"
+        details = "As an optical/mechanical engineer, I developed FTIR spectrometer products."
+	[[params.experience.list.items]]
+        details = "Used AutoDesk Inventor and Zemax to design optical parts."
+        [[params.experience.list.items]]
+        details = "Used Python to process raw data from prototype instruments."
+
+
+
+    [params.projects]
+        enable = false
+
+
+
+    [params.education]
+        enable = true
+
+        [[params.education.list]]
+        degree = "BS Physics"
+        university = "University of Connecticut"
+        dates = "2006 - 2010"
+
+
+    [params.awards]
+        enable = false
+
+
+    [params.skills]
+        enable = true
+
+        [[params.skills.list]]
+        title = "Technical"
+        [[params.skills.list.items]]
+        details = "Python/Django"
+        [[params.skills.list.items]]
+        details = "Go"
+        [[params.skills.list.items]]
+        details = "TypeScript/React"
+        [[params.skills.list.items]]
+        details = "PostgreSQL/MySQL"
+        [[params.skills.list.items]]
+        details = "GraphQL/REST/OpenAPI"
+        [[params.skills.list.items]]
+        details = "Test Driven Development"
+        [[params.skills.list.items]]
+        details = "Design and implement database structures"
+        [[params.skills.list.items]]
+        details = "CI/CD Pipelines"
+        [[params.skills.list.items]]
+        details = "Docker"
+
+
+        [[params.skills.list]]
+        title = "Professional"
+        [[params.skills.list.items]]
+        details = "Decomposes complex problems into simple parts"
+        [[params.skills.list.items]]
+        details = "Owner mentality"
+        [[params.skills.list.items]]
+        details = "Concise written communication"
+        [[params.skills.list.items]]
+        details = "Helpful code review"
+
+        [[params.skills.list]]
+        title = "Learning"
+        [[params.skills.list.items]]
+        details = "Terraform"
+        [[params.skills.list.items]]
+        details = "Rust"
+
+
+    [params.languages]
+        enable = false
+
+        [[params.languages.list]]
+        name = "English"
+        level = "Native"
+
+
+    [params.interests]
+        enable = false
+
+
+
+    [params.information]
+        enable = false
+
+        # [[params.information.list]]
+        # title = "Papers"
+        # [[params.information.list.items]]
+        # details = "2018 · Lorem Ipsum"
+        # [[params.information.list.items]]
+        # details = "2016 · Sed Fringilla"
+
+        # [[params.information.list]]
+        # title = "Interests"
+        # details = "Climbing, Snowboarding, Photography, Travelling"
+
+
+    [params.social]
+        enable = true
+
+        [[params.social.list]]
+        icon = "fab fa-github-square"
+        url = "//github.com/cstoltze"
+        title = "cstoltze"
