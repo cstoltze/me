@@ -56,6 +56,21 @@ theme = "hugo-devresume-theme"
         enable = true
 
         [[params.experience.list]]
+        title = "Founding Engineer"
+        dates = "Sept 2022 - Present"
+        company = "Develo"
+        details = """\
+	As the first full time employee, I witnessed the very first commit to Develo's git repo.
+	I work closely with the CTO, CEO, designers and other engineers to develop a modern EMR for pediatrics.
+	"""
+        [[params.experience.list.items]]
+        details = "Using Redwood.js to develop full-stack product features"
+        [[params.experience.list.items]]
+        details = "Leveraged BullMQ and Redis to enable asynchronous job processing"
+        [[params.experience.list.items]]
+        details = "Designing information architecture"
+
+        [[params.experience.list]]
         title = "Senior Software Developer / Technical Lead"
         dates = "Sept 2020 - June 2022"
         company = "ixlayer"
