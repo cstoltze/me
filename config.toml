@@ -69,6 +69,8 @@ theme = "hugo-devresume-theme"
         details = "Leveraged BullMQ and Redis to enable asynchronous job processing"
         [[params.experience.list.items]]
         details = "Designing information architecture"
+        [[params.experience.list.items]]
+        details = "Led integration of third party solutions such as e-prescribe, e-lab, and e-fax"
 
         [[params.experience.list]]
         title = "Senior Software Developer / Technical Lead"
