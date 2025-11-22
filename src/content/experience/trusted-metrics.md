@@ -12,6 +12,6 @@ system_design_decisions:
   - "Leveraged open-source tools to avoid reinventing the wheel for standard alerting logic."
 ---
 
-As the Python developer at a company of 8 employees, I leveraged an open source project to implement the next generation alerting engine for our flagship product. My efforts contributed to a successful acquisition by SolarWinds.
+Sole Python developer at an 8-person startup. Leveraged open-source tools to build the next-gen alerting engine, contributing to the company's acquisition by SolarWinds.
 
 - Implemented next generation alerting engine for Trusted Metrics’ flagship product

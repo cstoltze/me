@@ -11,18 +11,16 @@ const { Content } = await entry.render();
 ---
 
 <div class="mb-12 break-inside-avoid">
-  <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-4">
-    <div>
-      <h3 class="text-2xl font-bold">{title}</h3>
-      <h4 class="text-xl text-gray-600 font-medium">{company}</h4>
-    </div>
-    <span class="text-gray-500 font-mono mt-1 md:mt-0">{dates}</span>
+  <div class="flex flex-col md:flex-row justify-between items-baseline mb-1">
+    <h3 class="text-base font-bold text-gray-900 print:text-sm">{title}</h3>
+    <span class="text-gray-500 font-mono text-xs mt-1 md:mt-0 whitespace-nowrap print:text-[10px]">{dates}</span>
   </div>
+  <div class="text-xs font-medium text-gray-600 mb-2 print:text-[10px]">{company}</div>
 
   <div class="prose prose-sm max-w-none text-gray-800 leading-relaxed mb-4 
-    prose-p:italic prose-p:text-gray-600 prose-p:mb-3 prose-p:leading-relaxed
-    prose-ul:list-disc prose-ul:pl-4 prose-ul:mt-4 prose-ul:space-y-1
-    prose-li:text-gray-900 prose-li:not-italic prose-li:text-xs prose-li:marker:text-gray-400
+    prose-p:italic prose-p:text-gray-500 prose-p:mb-2 prose-p:leading-relaxed prose-p:text-xs print:prose-p:text-[10px]
+    prose-ul:list-disc prose-ul:pl-4 prose-ul:mt-2 prose-ul:space-y-0.5
+    prose-li:text-gray-900 prose-li:not-italic prose-li:text-xs prose-li:marker:text-gray-500 print:prose-li:text-[10px]
     print:prose-xs">
     <Content />
   </div>

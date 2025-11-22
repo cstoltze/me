@@ -14,9 +14,9 @@ system_design_decisions:
   - "Implemented a modular service architecture to allow easy extraction of microservices later."
 ---
 
-As the first full time employee, I witnessed the very first commit to Develo's git repo. I work closely with the CTO, CEO, designers and other engineers to develop a modern EMR for pediatrics.
+As the first full-time employee, I built the MVP from the first commit to launch, working directly with the founders to develop a modern pediatric EMR.
 
-- Using Redwood.js to develop full-stack product features
-- Leveraged BullMQ and Redis to enable asynchronous job processing
-- Designing information architecture
-- Led integration of third party solutions such as e-prescribe, e-lab, and e-fax
+- Architected full-stack features using Redwood.js
+- Implemented asynchronous job processing with BullMQ and Redis
+- Designed scalable information architecture
+- Integrated critical third-party APIs (e-prescribe, e-lab, e-fax)

@@ -13,8 +13,8 @@ system_design_decisions:
   - "Implemented signal processing algorithms directly in the software."
 ---
 
-Recruited away from Agilent, I joined Czitek, a small start-up developing FTIR (Fourier Transform Infrared) spectrometer products. I developed software to support engineering, manufacturing and use of FTIR spectrometers. Additionally, I contributed in a scientific capacity: troubleshooting prototypes, running experiments, and implementing algorithms.
+Developed software for FTIR spectrometers at a hardware startup. Contributed to engineering, manufacturing, and scientific R&D, including signal processing algorithms.
 
 - Implemented an FTIR and signal processing algorithm suite
-- Used MvvmCross and C# to create the UI for the ThreatID spectrometer
-- Developed an internal website tracking prototype metrics using Django
+- Created the UI for the ThreatID spectrometer using C# and MvvmCross
+- Developed an internal Django prototype tracking website

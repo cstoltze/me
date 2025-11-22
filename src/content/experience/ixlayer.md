@@ -14,12 +14,9 @@ system_design_decisions:
   - "Implemented a rule-based engine for lab result interpretation to replace hardcoded logic."
 ---
 
-As the second full time backend developer, I established a collaborative remote team culture grounded in written communication: detailed code review, clear concise unit tested code, and technical documentation.
+Rose to Tech Lead during Series A hyper-growth, establishing a culture of written documentation and rigorous code review while scaling the backend team.
 
-During my time at ixlayer, we raised an extremely successful Series A and grew by an order of magnitude. I rose to tech lead on the "core" backend team, mentoring junior developers, establishing team standards for code, overhauling our information architecture, and working cross-functionally with product managers and frontend developers to propose solutions to customer problems.
-
-- Aligned data model with industry-standard FHIR specification
-- Implemented lab result interpretation engine
-- Integrated third party API's (payment providers, labs, doctor networks, etc.)
-- Maintained and augmented internal and external REST APIs
-- Established a collaborative and quality-focused team culture
+- Aligned legacy data models with FHIR industry standards
+- Built a rule-based lab result interpretation engine
+- Integrated payment, lab, and provider network APIs
+- Mentored junior developers and established coding standards

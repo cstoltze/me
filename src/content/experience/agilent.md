@@ -12,7 +12,7 @@ system_design_decisions:
   - "Transitioned from manual data analysis to Python scripts, saving hours of engineering time."
 ---
 
-As an optical/mechanical engineer, I developed FTIR spectrometer products.
+Developed FTIR spectrometer products as an optical/mechanical engineer.
 
-- Used AutoDesk Inventor and Zemax to design optical parts.
-- Used Python to process raw data from prototype instruments.
+- Designed optical parts using AutoDesk Inventor and Zemax
+- Processed raw prototype data using Python

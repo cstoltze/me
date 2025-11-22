@@ -14,8 +14,8 @@ system_design_decisions:
   - "Introduced Cypress for end-to-end testing to catch regressions in critical flows."
 ---
 
-As the primary application developer on a technical team of four, I had a high degree of ownership of technical decisions on both the backend and frontend. Collaborating with the CTO and product designer, I wrote API's and frontend components to enable new features. I aggressively paid down technical debt by writing unit tests, refactoring large frontend components, and significantly simplifying the backend.
+Primary application developer with high ownership of technical decisions. Collaborated with the CTO to build features while aggressively paying down technical debt through testing and refactoring.
 
-- Re-architected backend. Consolidated two servers (Apollo Server and Django REST) into one GraphQL server written in Go using gqlgen
-- Improved readability and maintainability of the frontend using React hooks, testing (react testing library, cypress), and documentation (react-styleguidist)
-- Mentored a junior frontend developer (recent code bootcamp grad)
+- Re-architected backend by consolidating services into a single Go GraphQL server (gqlgen)
+- Modernized frontend with React Hooks, Cypress testing, and documentation
+- Mentored a junior frontend developer
