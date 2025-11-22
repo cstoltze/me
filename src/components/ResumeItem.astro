@@ -28,7 +28,7 @@ const { Content } = await entry.render();
   </div>
 
   {tags && (
-    <div class="flex flex-wrap gap-2 mt-3">
+    <div class="flex flex-wrap gap-2 mt-3 print:hidden">
       {tags.map(tag => (
         <span class="px-2 py-0.5 bg-gray-100 text-[10px] font-bold uppercase tracking-wider text-gray-500 rounded-full border border-gray-200">
           {tag}
