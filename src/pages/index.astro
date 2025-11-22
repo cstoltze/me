@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ChatInterface from '../components/ChatInterface.svelte';
+---
+
+<Layout title="Coleman Stoltze | Systems Thinker">
+	<main class="min-h-screen p-8 md:p-12 lg:p-24 flex flex-col">
+		<header class="flex justify-between items-start mb-12">
+			<a href="/" class="text-sm font-bold tracking-widest uppercase hover:text-blue-600 transition-colors">
+				Coleman Stoltze
+			</a>
+			<a href="/resume" class="text-sm font-bold tracking-widest uppercase border-b-2 border-transparent hover:border-blue-600 transition-all">
+				Traditional Resume ->
+			</a>
+		</header>
+
+		<ChatInterface client:load />
+	</main>
+</Layout>

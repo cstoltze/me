@@ -1,0 +1,156 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ResumeItem from '../components/ResumeItem.astro';
+import { getCollection } from 'astro:content';
+import profile from '../data/profile.json';
+import { Mail, Phone, Globe, MapPin, Github } from 'lucide-astro';
+
+const experience = await getCollection('experience');
+
+// Helper to parse dates for sorting
+function parseDate(dateStr: string) {
+  if (dateStr.toLowerCase().includes('present')) return new Date();
+  const parts = dateStr.split(' - ');
+  const start = parts[0]; 
+  return new Date(start);
+}
+
+const sortedExperience = experience.sort((a, b) => {
+  const dateA = parseDate(a.data.dates);
+  const dateB = parseDate(b.data.dates);
+  return dateB.getTime() - dateA.getTime();
+});
+---
+
+<Layout title={`Resume - ${profile.name}`}>
+  <main class="min-h-screen w-full bg-gray-100 py-8 print:p-0 print:bg-white">
+    
+    <!-- Navigation (Screen Only) -->
+    <nav class="max-w-5xl mx-auto mb-8 px-4 print:hidden flex justify-between items-center">
+      <a href="/" class="text-xs font-bold tracking-widest uppercase text-gray-500 hover:text-blue-600 transition-colors flex items-center gap-2">
+        <span>&larr;</span> Ask the Hype Man
+      </a>
+      <button onclick="window.print()" class="text-xs font-bold tracking-widest uppercase text-gray-500 hover:text-blue-600 transition-colors">
+        Print PDF
+      </button>
+    </nav>
+
+    <!-- Resume Container -->
+    <div class="max-w-5xl mx-auto bg-white shadow-2xl flex flex-col-reverse md:grid md:grid-cols-[260px_1fr] min-h-[1100px] print:shadow-none print:grid print:grid-cols-[240px_1fr] print:min-h-0 print:w-full">
+      
+      <!-- Sidebar (Left Column) -->
+      <aside class="bg-[#1a202c] text-white p-8 flex flex-col gap-10 print:p-6 print:bg-[#1a202c] print:text-white print-color-adjust-exact">
+        
+        <!-- Contact Info -->
+        <div class="space-y-3 text-xs font-mono text-gray-300">
+          <div class="flex flex-col gap-3">
+            <span class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">Contact</span>
+            
+            <a href={`mailto:${profile.contact.email}`} class="flex items-center gap-3 hover:text-white transition-colors group">
+              <Mail class="w-4 h-4 text-gray-500 group-hover:text-white transition-colors" />
+              <span>{profile.contact.email}</span>
+            </a>
+            
+            <a href={`tel:${profile.contact.phone}`} class="flex items-center gap-3 hover:text-white transition-colors group">
+              <Phone class="w-4 h-4 text-gray-500 group-hover:text-white transition-colors" />
+              <span>{profile.contact.phone}</span>
+            </a>
+            
+            <a href={`https://${profile.contact.website}`} class="flex items-center gap-3 hover:text-white transition-colors group">
+              <Globe class="w-4 h-4 text-gray-500 group-hover:text-white transition-colors" />
+              <span>{profile.contact.website}</span>
+            </a>
+            
+            <div class="flex items-center gap-3">
+              <MapPin class="w-4 h-4 text-gray-500" />
+              <span>{profile.location}</span>
+            </div>
+
+            <a href={`https://github.com/${profile.contact.github}`} class="flex items-center gap-3 hover:text-white transition-colors group">
+              <Github class="w-4 h-4 text-gray-500 group-hover:text-white transition-colors" />
+              <span>{profile.contact.github}</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div>
+          <h2 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3">Profile</h2>
+          <p class="text-xs leading-relaxed text-gray-300 italic">
+            {profile.summary}
+          </p>
+        </div>
+
+        <!-- Skills -->
+        <div>
+          <h2 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3">Skills</h2>
+          
+          <div class="mb-5">
+            <h3 class="text-xs font-bold text-white mb-2">Technical</h3>
+            <ul class="text-xs text-gray-300 space-y-1">
+              {profile.skills.technical.map(skill => (
+                <li>{skill}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-xs font-bold text-white mb-2">Professional</h3>
+            <ul class="text-xs text-gray-300 space-y-1">
+              {profile.skills.professional.map(skill => (
+                <li>{skill}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div>
+          <h2 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3">Education</h2>
+          {profile.education.map(edu => (
+            <div class="text-xs">
+              <div class="font-bold text-white">{edu.university}</div>
+              <div class="text-gray-300">{edu.degree}</div>
+              <div class="text-gray-500 font-mono text-[10px] mt-1">{edu.dates}</div>
+            </div>
+          ))}
+        </div>
+      </aside>
+
+      <!-- Main Content (Right Column) -->
+      <section class="p-8 md:p-12 bg-white text-black print:p-8 print:pt-6">
+        
+        <!-- Header -->
+        <header class="mb-12 print:mb-8">
+          <h1 class="text-5xl font-black tracking-tighter mb-2 leading-none print:text-4xl">{profile.name}</h1>
+          <p class="text-xl font-light text-gray-600 tracking-tight print:text-lg">{profile.tagline}</p>
+        </header>
+
+        <!-- Experience -->
+        <div>
+          <h2 class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-8 print:mb-4">Experience</h2>
+          <div class="space-y-10 print:space-y-6">
+            {sortedExperience.map(entry => (
+              <ResumeItem entry={entry} />
+            ))}
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+</Layout>
+
+<style>
+  /* Ensure background colors print correctly */
+  @media print {
+    .print-color-adjust-exact {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    @page {
+      margin: 0;
+    }
+  }
+</style>

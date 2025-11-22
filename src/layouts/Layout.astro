@@ -1,0 +1,41 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Coleman Stoltze - Systems Thinker & Software Engineer" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+	</head>
+	<body class="bg-white text-black font-sans antialiased selection:bg-blue-600 selection:text-white">
+		<div class="fixed inset-0 pointer-events-none z-50 mix-blend-difference border-[12px] border-transparent"></div>
+		<slot />
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--font-sans: 'Inter', system-ui, sans-serif;
+	}
+	html {
+		font-family: var(--font-sans);
+	}
+	h1, h2, h3, h4, h5, h6 {
+		font-weight: 900;
+		letter-spacing: -0.04em;
+	}
+</style>

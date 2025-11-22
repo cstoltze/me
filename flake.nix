@@ -16,7 +16,7 @@
       in
       {
         devShell = pkgs.mkShell {
-          buildInputs = [ pkgs.hugo ];
+          buildInputs = [ pkgs.hugo pkgs.nodejs_20 ];
         };
 
         packages.hugo = pkgs.hugo;

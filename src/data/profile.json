@@ -1,0 +1,40 @@
+{
+    "name": "Coleman Stoltze",
+    "tagline": "Systems Thinker & Software Engineer",
+    "location": "North Carolina",
+    "contact": {
+        "email": "coleman@stoltze.family",
+        "phone": "+1 203 856 9820",
+        "website": "coleman.stoltze.family",
+        "github": "cstoltze"
+    },
+    "summary": "A developer who writes simple idiomatic code, drives product improvement and learns continuously. An engineer who understands the big picture and minds the details. A teammate who levels up the people around him.",
+    "skills": {
+        "technical": [
+            "Python/Django",
+            "Go",
+            "TypeScript/React",
+            "PostgreSQL/MySQL",
+            "GraphQL/REST/OpenAPI",
+            "Test Driven Development",
+            "Database Design",
+            "CI/CD Pipelines",
+            "Docker",
+            "Terraform",
+            "Rust"
+        ],
+        "professional": [
+            "Decomposes complex problems",
+            "Owner mentality",
+            "Concise written communication",
+            "Helpful code review"
+        ]
+    },
+    "education": [
+        {
+            "degree": "BS Physics",
+            "university": "University of Connecticut",
+            "dates": "2006 - 2010"
+        }
+    ]
+}
