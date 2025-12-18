@@ -8,26 +8,33 @@
         "website": "coleman.stoltze.family",
         "github": "cstoltze"
     },
-    "summary": "A developer who writes simple idiomatic code, drives product improvement and learns continuously. An engineer who understands the big picture and minds the details. A teammate who levels up the people around him.",
+    "professional_summary": "Senior Software Engineer with a focus on systems thinking and product impact. Proven track record in building scalable backends, leading technical teams, and driving engineering culture in early-stage startups. Committed to writing simple, idiomatic code and leveling up the team around me.",
+    "sidebar_highlights": [
+        "Systems Thinker",
+        "Product-Minded Engineer",
+        "Continuous Learner",
+        "Team Multiplier"
+    ],
     "skills": {
-        "technical": [
+        "backend": [
             "Python/Django",
             "Go",
-            "TypeScript/React",
             "PostgreSQL/MySQL",
-            "GraphQL/REST/OpenAPI",
-            "Test Driven Development",
-            "Database Design",
-            "CI/CD Pipelines",
-            "Docker",
-            "Terraform",
             "Rust"
         ],
-        "professional": [
-            "Decomposes complex problems",
-            "Owner mentality",
-            "Concise written communication",
-            "Helpful code review"
+        "frontend": [
+            "TypeScript/React",
+            "GraphQL/REST"
+        ],
+        "devops": [
+            "Docker",
+            "Terraform",
+            "CI/CD Pipelines"
+        ],
+        "practices": [
+            "Test Driven Development",
+            "Database Design",
+            "System Architecture"
         ]
     },
     "education": [

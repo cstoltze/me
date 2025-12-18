@@ -18,27 +18,27 @@
   }
 </script>
 
-<div class="max-w-3xl mx-auto w-full flex flex-col h-[80vh] justify-between">
+<div class="max-w-3xl mx-auto w-full flex flex-col min-h-[80dvh] justify-between">
   
   <!-- Messages Area -->
   <div class="flex-1 overflow-y-auto space-y-8 pr-4 scrollbar-hide">
     {#if chat.messages.length === 0}
       <div class="mt-20" in:fade>
-        <h1 class="text-6xl font-black tracking-tighter mb-6 leading-[0.9]">
+        <h1 class="text-4xl md:text-6xl font-black tracking-tighter mb-6 leading-[0.9]">
           SYSTEMS<br>THINKER.
         </h1>
         <p class="text-xl text-gray-500 max-w-md mb-12 leading-relaxed">
-          I am Coleman's Hype Man. I can tell you about his experience, his philosophy, and why he prefers deleting code over writing it.
+          I am Coleman's Digital Advocate. I can tell you about his experience, his philosophy, and why he prefers deleting code over writing it.
         </p>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           {#each suggestedQuestions as q, i}
             <button 
-              class="text-left p-6 border border-gray-200 hover:border-blue-600 hover:bg-blue-50 transition-all duration-300 group"
+              class="text-left p-4 md:p-6 border border-gray-200 hover:border-blue-600 hover:bg-blue-50 transition-all duration-300 group active:scale-[0.98]"
               onclick={() => ask(q)}
             >
               <span class="block text-xs font-bold text-gray-400 mb-2 group-hover:text-blue-600">0{i + 1}</span>
-              <span class="text-lg font-medium">{q}</span>
+              <span class="text-base md:text-lg font-medium">{q}</span>
             </button>
           {/each}
         </div>
@@ -49,7 +49,7 @@
       <div class="flex flex-col items-start {m.role === 'user' ? 'items-end' : ''}" in:fly={{ y: 20, duration: 300 }}>
         <div class="max-w-[90%]">
           <span class="text-xs font-bold text-gray-400 mb-2 block uppercase tracking-widest">
-            {m.role === 'user' ? 'You' : 'Hype Man'}
+            {m.role === 'user' ? 'You' : 'Digital Advocate'}
           </span>
           <div class="text-lg leading-relaxed whitespace-pre-wrap {m.role === 'user' ? 'text-gray-900' : 'text-blue-900'}">
             {m.content}
@@ -71,12 +71,12 @@
   <form onsubmit={(e) => { e.preventDefault(); chat.handleSubmit(e); }} class="mt-8 relative group">
     <input
       bind:value={chat.input}
-      class="w-full bg-transparent text-4xl font-bold placeholder-gray-200 border-b-4 border-gray-200 focus:border-blue-600 outline-none py-4 transition-colors duration-300"
+      class="w-full bg-transparent text-xl md:text-4xl font-bold placeholder-gray-200 border-b-4 border-gray-200 focus:border-blue-600 outline-none py-4 pr-24 transition-colors duration-300"
       placeholder="Ask me anything..."
     />
     <button 
       type="submit"
-      class="absolute right-0 top-1/2 -translate-y-1/2 opacity-0 group-focus-within:opacity-100 transition-opacity duration-300 bg-blue-600 text-white px-6 py-2 font-bold text-sm uppercase tracking-widest hover:bg-blue-700"
+      class="absolute right-0 top-1/2 -translate-y-1/2 bg-blue-600 text-white px-4 md:px-6 py-2 font-bold text-xs md:text-sm uppercase tracking-widest hover:bg-blue-700 transition-all duration-300 {(chat.input || '').length > 0 ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'}"
     >
       Send
     </button>
