@@ -1,10 +1,16 @@
-import { openai } from '@ai-sdk/openai';
-import { streamText } from 'ai';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { streamText, convertToModelMessages } from 'ai';
 import { getCollection } from 'astro:content';
 import profile from '../../data/profile.json';
 
+export const prerender = false;
+
 export const POST = async ({ request }: { request: Request }) => {
   const { messages } = await request.json();
+
+  const google = createGoogleGenerativeAI({
+    apiKey: import.meta.env.GOOGLE_GENERATIVE_AI_API_KEY,
+  });
 
   // 1. Load Context
   const experience = await getCollection('experience');
@@ -65,10 +71,10 @@ export const POST = async ({ request }: { request: Request }) => {
 
   // 4. Stream Response
   const result = streamText({
-    model: openai('gpt-4o'),
+    model: google('gemini-3-flash-preview'),
     system: systemPrompt,
-    messages,
+    messages: convertToModelMessages(messages),
   });
 
-  return result.toTextStreamResponse();
+  return result.toUIMessageStreamResponse();
 };

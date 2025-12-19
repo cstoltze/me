@@ -9,13 +9,18 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@ai-sdk/google": "^2.0.49",
     "@ai-sdk/openai": "^2.0.71",
     "@ai-sdk/svelte": "^3.0.99",
     "@astrojs/svelte": "^7.2.2",
     "@tailwindcss/vite": "^4.1.17",
+    "@types/marked": "^6.0.0",
     "ai": "^5.0.99",
     "astro": "^5.16.0",
     "lucide-astro": "^0.554.0",
+    "lucide-svelte": "^0.561.0",
+    "marked": "^17.0.1",
+    "shiki": "^3.20.0",
     "svelte": "^5.43.14",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3"
