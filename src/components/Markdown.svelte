@@ -1,33 +1,21 @@
 <script lang="ts">
     import { marked } from "marked";
-    import { createHighlighter } from "shiki";
+    import { getHighlighter } from "../lib/highlighter";
     import { onMount } from "svelte";
+    import type { UIMessage } from "@ai-sdk/svelte";
 
-    interface Props {
+    let {
+        content,
+        role,
+    }: {
         content: string;
-        role: "user" | "assistant" | "system";
-    }
-
-    let { content, role }: Props = $props();
+        role: UIMessage["role"];
+    } = $props();
     let highlighter: any = $state(null);
     let renderedContent = $state("");
 
     onMount(async () => {
-        highlighter = await createHighlighter({
-            themes: ["github-light", "github-dark"],
-            langs: [
-                "javascript",
-                "typescript",
-                "python",
-                "go",
-                "html",
-                "css",
-                "json",
-                "markdown",
-                "bash",
-                "sh",
-            ],
-        });
+        highlighter = await getHighlighter();
     });
 
     $effect(() => {

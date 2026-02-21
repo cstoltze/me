@@ -2,8 +2,7 @@
   description = "A Hugo site";
 
   inputs = {
-    # for hugo 0.119.0
-    nixpkgs.url = "nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -16,7 +15,7 @@
       in
       {
         devShell = pkgs.mkShell {
-          buildInputs = [ pkgs.hugo pkgs.nodejs_20 ];
+          buildInputs = [ pkgs.hugo pkgs.nodejs_22 ];
         };
 
         packages.hugo = pkgs.hugo;

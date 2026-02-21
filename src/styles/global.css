@@ -1,2 +1,45 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+@theme {
+  --color-brand-50: #f0f9ff;
+  --color-brand-100: #e0f2fe;
+  --color-brand-200: #bae6fd;
+  --color-brand-300: #7dd3fc;
+  --color-brand-400: #38bdf8;
+  --color-brand-50: #0ea5e9;
+  --color-brand-600: #0284c7;
+  --color-brand-700: #0369a1;
+  --color-brand-800: #075985;
+  --color-brand-900: #0c4a6e;
+  --color-brand-950: #082f49;
+
+  --color-accent-purple: #8b5cf6;
+  --color-accent-cyan: #22d3ee;
+  --color-accent-pink: #f472b6;
+
+  --color-background: #020617;
+  --color-foreground: #ffffff;
+}
+
+@layer utilities {
+  .mesh-gradient {
+    background-color: var(--color-background);
+    background-image:
+      radial-gradient(at 0% 0%, var(--color-brand-900) 0px, transparent 50%),
+      radial-gradient(at 50% 0%, var(--color-accent-purple) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, var(--color-accent-cyan) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, var(--color-accent-pink) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, var(--color-brand-800) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, var(--color-brand-950) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-brand-200 to-brand-400;
+  }
+}
