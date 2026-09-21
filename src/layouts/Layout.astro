@@ -1,9 +1,9 @@
 ---
 import "../styles/global.css";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
-	title: string;
+  title: string;
 }
 
 const { title } = Astro.props;
@@ -11,72 +11,67 @@ const { title } = Astro.props;
 
 <!doctype html>
 <html lang="en" class="scroll-smooth">
-	<head>
-		<meta charset="UTF-8" />
-		<meta
-			name="description"
-			content="Coleman Stoltze - Systems Thinker & Software Engineer"
-		/>
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
-			rel="stylesheet"
-		/>
-		<ViewTransitions />
-	</head>
-	<body
-		class="bg-background text-foreground font-sans antialiased selection:bg-brand-400 selection:text-background min-h-screen mesh-gradient"
-	>
-		<!-- Noise Texture Overlay -->
-		<div
-			class="fixed inset-0 pointer-events-none z-50 opacity-[0.03] bg-[url('/noise.svg')]"
-		>
-		</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="description"
+      content="Coleman Stoltze - Systems Thinker & Software Engineer"
+    />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <ClientRouter />
+  </head>
+  <body class="font-sans antialiased selection:bg-brand-400 selection:text-brand-950 min-h-screen mesh-gradient">
+    <!-- Noise Texture Overlay -->
+    <div class="fixed inset-0 pointer-events-none z-50 opacity-[0.015] bg-[url('/noise.svg')] mix-blend-overlay"></div>
 
-		<div class="relative z-10">
-			<slot />
-		</div>
+    <div class="relative z-10">
+      <slot />
+    </div>
 
-		<style is:global>
-			:root {
-				--font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
-			}
-			html {
-				font-family: var(--font-sans);
-				background: var(--color-background);
-			}
-			body {
-				margin: 0;
-			}
-			h1,
-			h2,
-			h3,
-			h4,
-			h5,
-			h6 {
-				font-weight: 800;
-				letter-spacing: -0.04em;
-			}
+    <style is:global>
+      :root {
+        --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+      }
+      html {
+        font-family: var(--font-sans);
+        background: var(--color-background);
+      }
+      body {
+        margin: 0;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-weight: 800;
+        letter-spacing: -0.04em;
+      }
 
-			/* Custom Scrollbar */
-			::-webkit-scrollbar {
-				width: 8px;
-			}
-			::-webkit-scrollbar-track {
-				background: var(--color-background);
-			}
-			::-webkit-scrollbar-thumb {
-				background: rgba(255, 255, 255, 0.1);
-				border-radius: 9999px;
-			}
-			::-webkit-scrollbar-thumb:hover {
-				background: rgba(255, 255, 255, 0.2);
-			}
-		</style>
-	</body>
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--color-background);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 9999px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    </style>
+  </body>
 </html>

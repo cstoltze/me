@@ -1,46 +1,58 @@
 <script lang="ts">
-    import { Sparkles } from "lucide-svelte";
-    import { fade } from "svelte/transition";
+  import Sparkles from "lucide-svelte/icons/sparkles";
+  import { fade } from "svelte/transition";
 
-    let {
-        questions,
-        onSelect,
-    }: {
-        questions: string[];
-        onSelect: (q: string) => void;
-    } = $props();
+  let {
+    questions,
+    onSelect,
+  }: {
+    questions: string[];
+    onSelect: (question: string) => void;
+  } = $props();
 </script>
 
 <div
-    class="h-full flex flex-col items-center justify-center text-center px-4"
-    in:fade
+  class="h-full flex flex-col items-center justify-center text-center px-4 max-w-3xl mx-auto"
+  in:fade
 >
-    <div
-        class="w-20 h-20 bg-brand-500/10 rounded-3xl flex items-center justify-center mb-8 border border-brand-500/20"
+  <div
+    class="mb-10 inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-brand-400/5 border border-brand-400/10"
+  >
+    <Sparkles class="w-4 h-4 text-brand-400" />
+    <span
+      class="text-[9px] font-black uppercase tracking-[0.3em] text-brand-400"
+      >Digital Advocate</span
     >
-        <Sparkles class="w-10 h-10 text-brand-400" />
-    </div>
-    <h1
-        class="text-4xl md:text-5xl font-extrabold tracking-tighter mb-4 text-white"
-    >
-        Digital Advocate
-    </h1>
-    <p class="text-xl text-white/40 max-w-lg mb-12 leading-relaxed font-light">
-        Ask anything about engineering philosophy, systems design, or technical
-        expertise.
-    </p>
+  </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
-        {#each questions as q}
-            <button
-                class="text-left p-5 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-400/30 rounded-2xl transition-all duration-300 group active:scale-[0.98]"
-                onclick={() => onSelect(q)}
-            >
-                <span
-                    class="text-sm font-semibold text-white/70 group-hover:text-white"
-                    >{q}</span
-                >
-            </button>
-        {/each}
-    </div>
+  <h2
+    class="text-4xl md:text-5xl font-black tracking-tighter mb-6 text-white leading-tight"
+  >
+    Ask about<br /><span class="text-white/20 font-light">my work</span>
+  </h2>
+  <p
+    class="text-base md:text-lg text-white/50 mb-12 leading-relaxed font-light max-w-xl"
+  >
+    This agent has read my resume, project history, and notes on how I work. Ask
+    it something specific — it will tell you when it doesn't know.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
+    {#each questions as question (question)}
+      <button
+        class="text-left p-5 bg-white/[0.02] hover:bg-white/[0.05] border border-white/10 hover:border-brand-400/30 transition-all duration-300 group active:scale-[0.98] rounded-xl shadow-lg"
+        onclick={() => onSelect(question)}
+      >
+        <div class="flex items-start gap-4">
+          <div
+            class="w-2 h-2 rounded-full bg-brand-400/20 group-hover:bg-brand-400 mt-1.5 transition-colors"
+          ></div>
+          <span
+            class="text-sm font-bold text-white/60 group-hover:text-white transition-colors"
+            >{question}</span
+          >
+        </div>
+      </button>
+    {/each}
+  </div>
 </div>
