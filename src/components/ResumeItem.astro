@@ -1,0 +1,55 @@
+---
+import { marked } from "marked";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"experience">;
+}
+
+const { entry } = Astro.props;
+const { title, company, dates, tags } = entry.data;
+const html = marked.parse(entry.body ?? "", { async: false });
+---
+
+<div class="group relative pl-8 border-l-2 border-white/5 hover:border-brand-500/50 transition-all duration-500 py-1 print:pl-6 print:border-gray-200 print:py-0 print:border-l-2">
+  <!-- Dot Marker -->
+  <div class="absolute left-[-5px] top-3 w-2 h-2 rounded-full bg-brand-500 opacity-0 group-hover:opacity-100 transition-opacity blur-[2px] print:hidden"></div>
+
+  <div class="flex flex-col md:flex-row print:flex-row justify-between items-start print:items-start mb-4 print:mb-3">
+    <div class="flex flex-col gap-1">
+      <h3 class="text-3xl font-black text-white group-hover:text-brand-400 transition-colors duration-500 print:text-lg print:text-black leading-tight">
+        {title}
+      </h3>
+      <div class="flex items-center gap-3">
+        <span class="text-lg font-light text-white/30 print:text-sm print:text-blue-700 tracking-tight">
+          {company}
+        </span>
+        <div class="h-1 w-1 rounded-full bg-white/10 print:hidden"></div>
+        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-brand-400/40 print:hidden">
+          {dates}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="prose prose-invert prose-sm max-w-none text-white/30 leading-relaxed mb-8 font-light
+    prose-p:mb-4 prose-p:leading-relaxed prose-p:text-[15px] group-hover:text-white/50 transition-colors duration-500
+    print:prose-p:text-[11px] print:text-black print:prose-p:text-gray-700
+    prose-ul:list-disc prose-ul:pl-5 prose-ul:space-y-2
+    prose-li:marker:text-brand-400/40 print:prose-li:marker:text-gray-400
+    print:prose-xs"
+  >
+    <div set:html={html} />
+  </div>
+
+  {tags && (
+    <div class="flex flex-wrap gap-2 mt-8 print:hidden">
+      {tags.map((tag: string) => (
+        <span class="px-3 py-1.5 bg-white/[0.02] text-white/20 text-[9px] font-black uppercase tracking-[0.2em] rounded-md border border-white/5 hover:border-brand-400/20 hover:text-brand-400/60 hover:bg-brand-400/5 transition-all duration-300">
+          {tag}
+        </span>
+      ))}
+    </div>
+  )}
+</div>

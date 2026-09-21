@@ -1,0 +1,63 @@
+{
+  "name": "coleman-stoltze-site",
+  "type": "module",
+  "version": "2.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "wrangler dev",
+    "deploy": "astro build && wrangler deploy",
+    "check": "npm run types && astro check && svelte-check --threshold error",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "verify": "npm run format:check && npm run check && npm run test && npm run build",
+    "astro": "astro",
+    "types": "wrangler types"
+  },
+  "dependencies": {
+    "@ai-sdk/google": "^4.0.76",
+    "@ai-sdk/svelte": "^5.0.107",
+    "@astrojs/cloudflare": "^14.3.2",
+    "@astrojs/svelte": "^9.0.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "ai": "^7.0.107",
+    "astro": "^7.3.3",
+    "lucide-astro": "^0.556.0",
+    "lucide-svelte": "^1.0.1",
+    "marked": "^18.0.13",
+    "shiki": "^4.4.3",
+    "svelte": "^5.57.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@cloudflare/workers-types": "^5.20260921.1",
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/typography": "^0.5.20",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/svelte": "^5.4.2",
+    "@vitest/ui": "^5.0.1",
+    "happy-dom": "^20.14.5",
+    "prettier": "^3.9.8",
+    "prettier-plugin-astro": "^1.0.1",
+    "prettier-plugin-svelte": "^4.1.1",
+    "svelte-check": "^4.7.6",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.1",
+    "vitest-fetch-mock": "^0.4.5",
+    "wrangler": "^4.135.0"
+  },
+  "private": true,
+  "description": "Personal site and resume for Coleman Stoltze, with an AI agent that answers questions about his work.",
+  "engines": {
+    "node": ">=22"
+  },
+  "overrides": {
+    "vite": "$vite"
+  }
+}
