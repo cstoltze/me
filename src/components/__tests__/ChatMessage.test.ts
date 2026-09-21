@@ -1,45 +1,54 @@
-import { screen } from '@testing-library/svelte';
-import { render } from '@testing-library/svelte-core';
-import { describe, it, expect, vi } from 'vitest';
-import ChatMessage from '../ChatMessage.svelte';
+import { render, screen } from "@testing-library/svelte";
+import { describe, it, expect, vi } from "vitest";
+import ChatMessage from "../ChatMessage.svelte";
+import type { UIMessage } from "@ai-sdk/svelte";
 
-// Mock Markdown component
-vi.mock('../Markdown.svelte', async () => {
-    const MockMarkdown = await import('./MockMarkdown.svelte');
-    return { default: MockMarkdown.default };
-});
+// Markdown rendering is async and Shiki-backed; it has its own test.
+vi.mock("../Markdown.svelte", async () => ({
+  default: (await import("./markdown-stub.svelte")).default,
+}));
 
-describe('ChatMessage', () => {
-    it('renders user message correctly', () => {
-        const message = { id: '1', role: 'user', parts: [{ type: 'text', text: 'Hello' }] } as any;
-        render(ChatMessage, { message });
+function message(role: "user" | "assistant", ...texts: string[]): UIMessage {
+  return {
+    id: role,
+    role,
+    parts: texts.map((text) => ({ type: "text" as const, text })),
+  } as UIMessage;
+}
 
-        expect(screen.getByText('Hello')).toBeInTheDocument();
-        // The outer container is two levels up from the text in the bubble
-        const bubble = screen.getByText('Hello').closest('.rounded-2xl');
-        const outerContainer = bubble?.parentElement?.parentElement?.parentElement;
-        expect(outerContainer).toHaveClass('justify-end');
-    });
+/** The flex row that decides which side of the transcript a message sits on. */
+function alignmentRow(text: string): HTMLElement | null {
+  return screen
+    .getByText(text)
+    .closest("div.flex.justify-end, div.flex.justify-start");
+}
 
-    it('renders assistant message correctly', () => {
-        const message = { id: '2', role: 'assistant', parts: [{ type: 'text', text: 'Hi there' }] } as any;
-        render(ChatMessage, { message });
+describe("ChatMessage", () => {
+  it("aligns a user message to the right", () => {
+    render(ChatMessage, { message: message("user", "Hello") });
+    expect(screen.getByText("Hello")).toBeInTheDocument();
+    expect(alignmentRow("Hello")).toHaveClass("justify-end");
+  });
 
-        expect(screen.getByText('Hi there')).toBeInTheDocument();
-        const bubble = screen.getByText('Hi there').closest('.rounded-2xl');
-        const outerContainer = bubble?.parentElement?.parentElement?.parentElement;
-        expect(outerContainer).toHaveClass('justify-start');
-    });
+  it("aligns an assistant message to the left", () => {
+    render(ChatMessage, { message: message("assistant", "Hi there") });
+    expect(screen.getByText("Hi there")).toBeInTheDocument();
+    expect(alignmentRow("Hi there")).toHaveClass("justify-start");
+  });
 
-    it('renders message parts if present', () => {
-        const message = {
-            id: '3',
-            role: 'assistant',
-            parts: [{ type: 'text', text: 'Part 1' }, { type: 'text', text: 'Part 2' }]
-        } as any;
-        render(ChatMessage, { message });
+  it("renders every text part of a message", () => {
+    render(ChatMessage, { message: message("assistant", "Part 1", "Part 2") });
+    expect(screen.getByText("Part 1")).toBeInTheDocument();
+    expect(screen.getByText("Part 2")).toBeInTheDocument();
+  });
 
-        expect(screen.getByText('Part 1')).toBeInTheDocument();
-        expect(screen.getByText('Part 2')).toBeInTheDocument();
-    });
+  it("ignores non-text parts", () => {
+    const withTool = {
+      id: "tool",
+      role: "assistant",
+      parts: [{ type: "step-start" }, { type: "text", text: "Visible" }],
+    } as unknown as UIMessage;
+    render(ChatMessage, { message: withTool });
+    expect(screen.getByText("Visible")).toBeInTheDocument();
+  });
 });

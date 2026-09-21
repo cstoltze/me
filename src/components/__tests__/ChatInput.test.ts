@@ -1,63 +1,63 @@
-import { fireEvent, screen } from '@testing-library/svelte';
-import { render } from '@testing-library/svelte-core';
-import { describe, it, expect, vi } from 'vitest';
-import ChatInput from '../ChatInput.svelte';
+import { render, screen, fireEvent } from "@testing-library/svelte";
+import { describe, it, expect, vi } from "vitest";
+import ChatInput from "../ChatInput.svelte";
 
-describe('ChatInput', () => {
-    it('renders correctly', async () => {
-        render(ChatInput, { value: '', status: 'ready', onSubmit: () => { } });
-        expect(await screen.findByPlaceholderText(`Ask Coleman's Digital Advocate...`)).toBeInTheDocument();
-    });
+const PLACEHOLDER = "Ask about my work…";
 
-    it('updates value on input', async () => {
-        render(ChatInput, { value: '', status: 'ready', onSubmit: () => { } });
-        const textarea = await screen.findByPlaceholderText(`Ask Coleman's Digital Advocate...`);
+function setup(
+  props: Partial<{ value: string; busy: boolean; onSubmit: () => void }> = {},
+) {
+  const onSubmit = vi.fn();
+  render(ChatInput, { value: "", busy: false, onSubmit, ...props });
+  return {
+    onSubmit: props.onSubmit ?? onSubmit,
+    textarea: screen.getByPlaceholderText(PLACEHOLDER),
+    button: screen.getByRole("button", { name: "Send message" }),
+  };
+}
 
-        await fireEvent.input(textarea, { target: { value: 'Hello' } });
-        // In Svelte 5, $bindable() might need special handling in tests depending on how it's rendered
-        // But standard fireEvent should work for the DOM state.
-        expect(textarea).toHaveValue('Hello');
-    });
+describe("ChatInput", () => {
+  it("renders the prompt", () => {
+    const { textarea } = setup();
+    expect(textarea).toBeInTheDocument();
+  });
 
-    it('calls onSubmit when button is clicked', async () => {
-        const onSubmit = vi.fn();
-        render(ChatInput, { value: 'Hello', status: 'ready', onSubmit });
+  it("reflects typed input", async () => {
+    const { textarea } = setup();
+    await fireEvent.input(textarea, { target: { value: "Hello" } });
+    expect(textarea).toHaveValue("Hello");
+  });
 
-        const button = screen.getByRole('button');
-        await fireEvent.click(button);
+  it("submits when the send button is clicked", async () => {
+    const onSubmit = vi.fn();
+    const { button } = setup({ value: "Hello", onSubmit });
+    await fireEvent.click(button);
+    expect(onSubmit).toHaveBeenCalled();
+  });
 
-        expect(onSubmit).toHaveBeenCalled();
-    });
+  it("disables sending when the input is empty", () => {
+    expect(setup({ value: "" }).button).toBeDisabled();
+  });
 
-    it('disables button when value is empty', () => {
-        render(ChatInput, { value: '', status: 'ready', onSubmit: () => { } });
-        const button = screen.getByRole('button');
-        expect(button).toBeDisabled();
-    });
+  it("disables sending when the input is only whitespace", () => {
+    expect(setup({ value: "   " }).button).toBeDisabled();
+  });
 
-    it('disables button when status is streaming', () => {
-        render(ChatInput, { value: 'Hello', status: 'streaming', onSubmit: () => { } });
-        const button = screen.getByRole('button');
-        expect(button).toBeDisabled();
-    });
+  it("disables sending while a reply is pending", () => {
+    expect(setup({ value: "Hello", busy: true }).button).toBeDisabled();
+  });
 
-    it('calls onSubmit on Enter keydown', async () => {
-        const onSubmit = vi.fn();
-        render(ChatInput, { props: { value: 'Hello', status: 'ready', onSubmit } });
+  it("submits on Enter", async () => {
+    const onSubmit = vi.fn();
+    const { textarea } = setup({ value: "Hello", onSubmit });
+    await fireEvent.keyDown(textarea, { key: "Enter" });
+    expect(onSubmit).toHaveBeenCalled();
+  });
 
-        const textarea = screen.getByPlaceholderText(`Ask Coleman's Digital Advocate...`);
-        await fireEvent.keyDown(textarea, { key: 'Enter' });
-
-        expect(onSubmit).toHaveBeenCalled();
-    });
-
-    it('does not call onSubmit on Shift+Enter keydown', async () => {
-        const onSubmit = vi.fn();
-        render(ChatInput, { props: { value: 'Hello', status: 'ready', onSubmit } });
-
-        const textarea = screen.getByPlaceholderText(`Ask Coleman's Digital Advocate...`);
-        await fireEvent.keyDown(textarea, { key: 'Enter', shiftKey: true });
-
-        expect(onSubmit).not.toHaveBeenCalled();
-    });
+  it("inserts a newline on Shift+Enter instead of submitting", async () => {
+    const onSubmit = vi.fn();
+    const { textarea } = setup({ value: "Hello", onSubmit });
+    await fireEvent.keyDown(textarea, { key: "Enter", shiftKey: true });
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
 });

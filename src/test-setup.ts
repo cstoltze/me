@@ -1,19 +1,14 @@
-import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import "@testing-library/jest-dom/vitest";
+import { vi } from "vitest";
 
-// Mock fetch for API tests
-import createFetchMock from 'vitest-fetch-mock';
-const fetchMock = createFetchMock(vi);
-fetchMock.enableMocks();
-
-// Mock Element.prototype.animate for Svelte transitions
-if (typeof Element !== 'undefined') {
-    Element.prototype.animate = vi.fn().mockReturnValue({
-        finished: Promise.resolve(),
-        cancel: vi.fn(),
-        pause: vi.fn(),
-        play: vi.fn(),
-        reverse: vi.fn(),
-        finish: vi.fn(),
-    });
+// happy-dom has no Web Animations API, which Svelte's transitions call into.
+if (typeof Element !== "undefined") {
+  Element.prototype.animate = vi.fn().mockReturnValue({
+    finished: Promise.resolve(),
+    cancel: vi.fn(),
+    pause: vi.fn(),
+    play: vi.fn(),
+    reverse: vi.fn(),
+    finish: vi.fn(),
+  }) as unknown as Element["animate"];
 }
