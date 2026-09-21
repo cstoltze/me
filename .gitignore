@@ -22,3 +22,19 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# nix / direnv
+.direnv/
+.direnv
+
+# test artifacts
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# generated from wrangler.jsonc by `npm run types`
+worker-configuration.d.ts
+
+# wrangler local state
+.wrangler/
