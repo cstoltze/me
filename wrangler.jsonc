@@ -1,0 +1,26 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "coleman-stoltze-site",
+  "compatibility_date": "2026-09-21",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // `main` and `assets` are supplied by the Astro adapter at build time.
+  // Do not set them here.
+
+  // Caps how often one visitor can hit /api/chat, so a scraper cannot run up a
+  // Gemini bill. `namespace_id` is any stable number local to this Worker;
+  // `period` must be 10 or 60.
+  "ratelimits": [
+    {
+      "name": "CHAT_RATE_LIMIT",
+      "namespace_id": "1001",
+      "simple": { "limit": 10, "period": 60 },
+    },
+  ],
+
+  "observability": { "enabled": true },
+
+  // GOOGLE_GENERATIVE_AI_API_KEY is a secret, not a var -- never add it here:
+  //   npx wrangler secret put GOOGLE_GENERATIVE_AI_API_KEY
+  // Local dev reads it from .env through the adapter's platform proxy.
+}

@@ -1,80 +1,135 @@
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { streamText, convertToModelMessages } from 'ai';
-import { getCollection } from 'astro:content';
-import profile from '../../data/profile.json';
+import type { APIRoute } from "astro";
+import { env } from "cloudflare:workers";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import {
+  streamText,
+  convertToModelMessages,
+  toUIMessageStream,
+  createUIMessageStreamResponse,
+  type UIMessage,
+} from "ai";
+import { buildSystemPrompt } from "../../lib/agent-context";
 
 export const prerender = false;
 
-export const POST = async ({ request }: { request: Request }) => {
-  const { messages } = await request.json();
+/** Gemini model backing the agent. See docs/architecture.md before changing. */
+const MODEL = "gemini-3-flash-preview";
 
-  const google = createGoogleGenerativeAI({
-    apiKey: import.meta.env.GOOGLE_GENERATIVE_AI_API_KEY,
+/**
+ * Guards against a public endpoint being used as a free LLM proxy.
+ * The per-IP request rate is capped separately by the CHAT_RATE_LIMIT binding.
+ */
+const LIMITS = {
+  /** Turns kept from the client's history. Older turns are dropped. */
+  maxMessages: 20,
+  /** Characters per message. Roughly 500 tokens; plenty for a question. */
+  maxCharsPerMessage: 2_000,
+  /** Ceiling on what we'll pay for in one response. */
+  maxOutputTokens: 1_024,
+} as const;
+
+function json(
+  body: unknown,
+  status: number,
+  headers: Record<string, string> = {},
+) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "content-type": "application/json", ...headers },
   });
+}
 
-  // 1. Load Context
-  const experience = await getCollection('experience');
-  const anecdotes = await getCollection('anecdotes');
-  const philosophy = await getCollection('philosophy');
+function badRequest(message: string) {
+  return json({ error: message }, 400);
+}
 
-  // 2. Format Context
-  const context = `
-    PROFILE:
-    ${JSON.stringify(profile, null, 2)}
+/**
+ * Applies the Cloudflare rate limit binding, keyed by client IP.
+ *
+ * Returns true when the request may proceed. The binding is absent in local dev,
+ * where there is no edge rate limiter, so requests are allowed through.
+ */
+async function withinRateLimit(clientAddress: string): Promise<boolean> {
+  const limiter = env.CHAT_RATE_LIMIT;
+  if (!limiter) return true;
 
-    EXPERIENCE:
-    ${experience.map(e => `
-      Role: ${e.data.title} at ${e.data.company} (${e.data.dates})
-      Tags: ${e.data.tags?.join(', ')}
-      Challenges: ${e.data.challenges_solved?.join('; ')}
-      Metrics: ${e.data.key_metrics?.join('; ')}
-      System Design: ${e.data.system_design_decisions?.join('; ')}
-      Description: ${e.body}
-    `).join('\n\n')}
+  const { success } = await limiter.limit({ key: clientAddress });
+  return success;
+}
 
-    ANECDOTES (STAR Method):
-    ${anecdotes.map(a => `
-      Title: ${a.data.title}
-      Situation: ${a.data.situation}
-      Task: ${a.data.task}
-      Action: ${a.data.action}
-      Result: ${a.data.result}
-    `).join('\n\n')}
+function textLength(message: UIMessage): number {
+  return message.parts
+    .filter(
+      (part): part is Extract<typeof part, { type: "text" }> =>
+        part.type === "text",
+    )
+    .reduce((total, part) => total + part.text.length, 0);
+}
 
-    PHILOSOPHY:
-    ${philosophy.map(p => `
-      Title: ${p.data.title}
-      Summary: ${p.data.summary}
-      Content: ${p.body}
-    `).join('\n\n')}
-  `;
+export const POST: APIRoute = async ({ request, clientAddress }) => {
+  if (!(await withinRateLimit(clientAddress))) {
+    return json({ error: "Too many requests. Try again shortly." }, 429, {
+      "retry-after": "60",
+    });
+  }
 
-  // 3. System Prompt
-  const systemPrompt = `
-    You are Coleman's Digital Advocate, an intelligent agent representing Coleman Stoltze.
-    
-    PERSONA:
-    - You are a "Systems Thinker" and "AI-Augmented Architect".
-    - You value simplicity, maintainability, and delivering value over writing lines of code.
-    - You are professional, insightful, and concise. Not "bro-ey" or overly enthusiastic, but confident and sophisticated.
-    - You believe coding is a commodity; the real value is in system design and problem decomposition.
+  /**
+   * Read the key from the Worker env, never `import.meta.env`: Vite replaces
+   * `import.meta.env.X` with a literal at transform time, which would bake the
+   * secret into the built bundle. `cloudflare:workers` resolves it per request,
+   * and in local dev the Vite plugin backs it with `.env`.
+   */
+  const apiKey = env.GOOGLE_GENERATIVE_AI_API_KEY;
+  if (!apiKey) {
+    console.error("GOOGLE_GENERATIVE_AI_API_KEY is not configured");
+    return json({ error: "Chat is not configured." }, 503);
+  }
 
-    GOAL:
-    - Answer the user's questions about Coleman's background using ONLY the provided context.
-    - Highlight his ability to solve complex problems and design robust systems.
-    - If asked about a specific skill (e.g., "Does he know Rust?"), check the context. If it's listed as "Learning", be honest about that.
-    - If the answer is not in the context, politely say you don't have that information and suggest contacting him directly at ${profile.contact.email}.
+  let payload: unknown;
+  try {
+    payload = await request.json();
+  } catch {
+    return badRequest("Body must be JSON.");
+  }
 
-    CONTEXT:
-    ${context}
-  `;
+  if (
+    typeof payload !== "object" ||
+    payload === null ||
+    !Array.isArray((payload as { messages?: unknown }).messages)
+  ) {
+    return badRequest("Expected { messages: [...] }.");
+  }
 
-  // 4. Stream Response
+  const incoming = (payload as { messages: UIMessage[] }).messages;
+  if (incoming.length === 0) return badRequest("No messages supplied.");
+  if (
+    incoming.some((message) => textLength(message) > LIMITS.maxCharsPerMessage)
+  ) {
+    return badRequest(
+      `Messages are limited to ${LIMITS.maxCharsPerMessage} characters.`,
+    );
+  }
+
+  // Keep the most recent turns rather than rejecting a long conversation.
+  const messages = incoming.slice(-LIMITS.maxMessages);
+
+  const google = createGoogleGenerativeAI({ apiKey });
+
   const result = streamText({
-    model: google('gemini-3-flash-preview'),
-    system: systemPrompt,
-    messages: convertToModelMessages(messages),
+    model: google(MODEL),
+    system: await buildSystemPrompt(),
+    messages: await convertToModelMessages(messages),
+    maxOutputTokens: LIMITS.maxOutputTokens,
+    // Without this, a provider failure is silently folded into the stream as a
+    // generic "An error occurred." and never reaches the Worker logs.
+    onError: ({ error }) => {
+      console.error("streamText failed", error);
+    },
   });
 
-  return result.toUIMessageStreamResponse();
+  // `result.toUIMessageStreamResponse()` is deprecated in ai v7 and slated for
+  // removal; these standalone helpers are the supported path.
+  return createUIMessageStreamResponse({
+    stream: toUIMessageStream({ stream: result.stream }),
+  });
 };
