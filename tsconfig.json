@@ -6,17 +6,21 @@
     "noEmit": true,
     "checkJs": true,
     "jsx": "preserve",
-    "jsxImportSource": "svelte"
+    "jsxImportSource": "svelte",
+    "types": ["vitest/globals"]
   },
+  // `.astro/types.d.ts` pulls in the generated content collection types.
+  // `worker-configuration.d.ts` (from `npm run types`) declares the
+  // `cloudflare:workers` module and the Env bindings.
+  // Neither may be excluded -- `exclude` filters `include`, so listing their
+  // directories would silently degrade those types to `any`.
   "include": [
     ".astro/types.d.ts",
-    "src/**/*"
+    "worker-configuration.d.ts",
+    "src/**/*",
+    "tests/**/*",
+    "*.config.ts",
+    "*.config.mjs"
   ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    ".astro",
-    ".direnv",
-    ".git"
-  ]
+  "exclude": ["dist", "node_modules", ".direnv"]
 }
