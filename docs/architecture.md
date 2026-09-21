@@ -129,6 +129,13 @@ comment about it. `worker-configuration.d.ts` is generated, not committed — th
   files that esbuild's optimizer cannot load. Icons are imported individually
   (`lucide-svelte/icons/send`) rather than from the barrel, which is also much
   less work for the bundler.
-- **`astro dev` backgrounds itself when it detects an AI coding agent.** That
-  makes Playwright think the server exited, so `playwright.config.ts` passes
-  `--ignore-lock` to keep it in the foreground.
+- **`astro dev` backgrounds itself when it detects an AI coding agent.** Its
+  output goes to `.astro/dev.log` rather than the terminal.
+- **The e2e suite runs against the production build**, not the dev server. The
+  dev server compiles routes on demand, which made WebKit time out under
+  parallel workers; it also means the tests exercise the real Worker bundle.
+- **On NixOS, Playwright's browsers come from `flake.nix`.** Its own download is
+  dynamically linked against libraries NixOS does not provide. The npm
+  `@playwright/test` version and the nixpkgs `playwright-driver` version must
+  match, since Playwright looks for exact browser revisions — `nix flake update`
+  is the fix when they drift.

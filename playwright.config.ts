@@ -4,12 +4,23 @@ export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  // One local retry: the suite is deterministic in isolation, but running five
+  // browser engines at once can starve WebKit on a busy machine. Retries absorb
+  // that without hiding a real failure, which fails both attempts.
+  retries: process.env.CI ? 2 : 1,
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
+
+  // Generous but not unlimited: WebKit in particular is slow under parallel
+  // workers, and a real failure should still surface promptly.
+  expect: { timeout: 15_000 },
+  timeout: 60_000,
+
   use: {
     baseURL: "http://localhost:4321",
     trace: "on-first-retry",
+    actionTimeout: 15_000,
+    navigationTimeout: 30_000,
   },
   projects: [
     {
@@ -34,13 +45,13 @@ export default defineConfig({
     },
   ],
   webServer: {
-    // `--ignore-lock` keeps the dev server in the foreground. Astro 7 detects
-    // when it is run by an AI coding agent and backgrounds itself, which makes
-    // Playwright think the server exited immediately.
-    command: "npm run dev -- --ignore-lock",
+    // Runs against the production build rather than the dev server. The dev
+    // server compiles routes on demand, so first hits were slow enough to make
+    // WebKit time out under parallel workers. This also exercises the actual
+    // Worker bundle, which is what gets deployed.
+    command: "npm run build && npm run preview -- --port 4321",
     url: "http://localhost:4321",
     reuseExistingServer: !process.env.CI,
-    // Astro's first dev start has to sync content and generate types.
-    timeout: 120_000,
+    timeout: 180_000,
   },
 });

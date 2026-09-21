@@ -58,13 +58,13 @@ test.describe("Chat", () => {
     await stubChat(page, "A reply.");
     await page.goto("/");
 
-    const suggestion = page
-      .getByRole("button")
-      .filter({ hasText: "?" })
-      .first();
+    const suggestion = page.getByTestId("suggested-question").first();
     const text = (await suggestion.innerText()).trim();
     await suggestion.click();
 
+    // The panel unmounts once a message is sent. Waiting for that first avoids
+    // racing the transition while the transcript renders.
+    await expect(suggestion).toBeHidden();
     await expect(page.getByText(text, { exact: false }).first()).toBeVisible();
     await expect(page.getByText("A reply.")).toBeVisible();
   });

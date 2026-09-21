@@ -196,7 +196,11 @@ const sortedExperience = [...experience].sort(
           <h2 class="text-xs font-black uppercase tracking-[0.4em] text-white/20 mb-12 print:text-gray-400">
             Professional Experience
           </h2>
-          <div class="space-y-16 print:space-y-10">
+          <div
+            id="experience"
+            aria-label="Professional experience"
+            class="space-y-16 print:space-y-10"
+          >
             {sortedExperience.map((entry) => (
               <ResumeItem entry={entry} />
             ))}

@@ -21,7 +21,9 @@ test.describe("Navigation", () => {
     page,
   }) => {
     await page.goto("/resume");
-    const roles = page.locator("main h3");
+    // Scoped to #experience: a bare "main h3" also matches the sidebar's
+    // skill-category headings.
+    const roles = page.locator("#experience h3");
     await expect(roles.first()).toBeVisible();
     // The most recent role is the one still in progress.
     await expect(roles.first()).toHaveText("Founding Engineer");

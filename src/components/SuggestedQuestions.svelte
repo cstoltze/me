@@ -5,9 +5,12 @@
   let {
     questions,
     onSelect,
+    ready = true,
   }: {
     questions: string[];
     onSelect: (question: string) => void;
+    /** False until the island has hydrated; see ChatInterface. */
+    ready?: boolean;
   } = $props();
 </script>
 
@@ -40,6 +43,8 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
     {#each questions as question (question)}
       <button
+        data-testid="suggested-question"
+        disabled={!ready}
         class="text-left p-5 bg-white/[0.02] hover:bg-white/[0.05] border border-white/10 hover:border-brand-400/30 transition-all duration-300 group active:scale-[0.98] rounded-xl shadow-lg"
         onclick={() => onSelect(question)}
       >

@@ -4,12 +4,22 @@
   import SuggestedQuestions from "./SuggestedQuestions.svelte";
   import ChatInput from "./ChatInput.svelte";
   import TypingIndicator from "./TypingIndicator.svelte";
+  import { onMount } from "svelte";
 
   // Defaults to POSTing at /api/chat -- see src/pages/api/chat.ts.
   const chat = new Chat({});
 
   let input = $state("");
   let scrollContainer = $state<HTMLDivElement>();
+
+  // This is a client:load island, so the server renders its markup and the
+  // browser paints it before Svelte attaches any handlers. Controls shown during
+  // that window look interactive but silently do nothing when clicked. Gate them
+  // on hydration instead: they render disabled and enable on mount.
+  let hydrated = $state(false);
+  onMount(() => {
+    hydrated = true;
+  });
 
   const suggestedQuestions = [
     "What does Coleman actually do day to day?",
@@ -37,8 +47,13 @@
   }
 
   $effect(() => {
-    // Touch the length so this re-runs as messages stream in.
-    void chat.messages.length;
+    // Reading the length is what subscribes this effect to streaming updates.
+    const messageCount = chat.messages.length;
+
+    // Nothing to scroll to before the first message, and firing a smooth scroll
+    // on mount just animates the empty panel for no reason.
+    if (messageCount === 0) return;
+
     scrollContainer?.scrollTo({
       top: scrollContainer.scrollHeight,
       behavior: "smooth",
@@ -55,7 +70,11 @@
     class="flex-1 overflow-y-auto p-4 md:p-8 space-y-8 scroll-smooth"
   >
     {#if chat.messages.length === 0}
-      <SuggestedQuestions questions={suggestedQuestions} onSelect={send} />
+      <SuggestedQuestions
+        questions={suggestedQuestions}
+        onSelect={send}
+        ready={hydrated}
+      />
     {/if}
 
     {#each chat.messages as message (message.id)}
@@ -79,7 +98,11 @@
   </div>
 
   <!-- Input Area -->
-  <ChatInput bind:value={input} busy={isBusy} onSubmit={handleFormSubmit} />
+  <ChatInput
+    bind:value={input}
+    busy={isBusy || !hydrated}
+    onSubmit={handleFormSubmit}
+  />
 </div>
 
 <style>

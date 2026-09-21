@@ -42,8 +42,17 @@ real time to diagnose.
   `shiki` root pulls every grammar — about 10 MB of chunks, too big for a Worker.
 - **`astro dev` backgrounds itself when run by an AI agent.** Logs go to
   `.astro/dev.log`, not the terminal — read that file when the server "exits
-  before becoming ready". `astro dev stop` stops it. Playwright passes
-  `--ignore-lock` to keep it in the foreground.
+  before becoming ready". `astro dev stop` stops it. Leaving a stale one running
+  while `npm run build` executes corrupts `node_modules/.vite`; clear that
+  directory if the dev server starts 500ing on optimized deps.
+- **Playwright runs against the production build**, not the dev server, so the
+  e2e suite needs no dev server running. On NixOS the browsers come from the
+  flake; `nix flake update` is the fix when Playwright reports a missing
+  executable, because npm's version and nixpkgs' must agree.
+- **Interactive controls in the chat island must be gated on hydration.**
+  `ChatInterface` is `client:load`, so its markup paints before handlers attach;
+  anything clickable before then silently does nothing. Pass `ready={hydrated}`
+  rather than rendering a live-looking dead button.
 - **Model output is rendered with `{@html}`.** `src/components/Markdown.svelte`
   escapes raw HTML deliberately. Do not remove that renderer override.
 - **Resume `dates` must be `<Month> <YYYY>`.** `src/lib/dates.ts` throws on
