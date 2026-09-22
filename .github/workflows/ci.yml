@@ -22,6 +22,14 @@ jobs:
 
       - run: npm ci
 
+      # `npm run check` runs `wrangler types`, which learns binding names from
+      # `.env`. That file is gitignored (it holds the real API key locally),
+      # so on the runner it's missing and `Env` comes out without
+      # GOOGLE_GENERATIVE_AI_API_KEY, failing the typecheck. .env.example has
+      # the same key with an empty value, which is enough for wrangler to
+      # generate the right type -- no real secret involved.
+      - run: cp .env.example .env
+
       - name: Check formatting
         run: npm run format:check
 
